@@ -46,13 +46,17 @@ class Translatable extends Field
     protected function resolveAttribute($resource, $attribute)
     {
         $results = [];
-        if ( class_exists('\Spatie\Translatable\TranslatableServiceProvider') && method_exists($resource, 'getTranslations') ) {
-            $results = $resource->getTranslations($attribute);
-        } elseif ( class_exists('\Astrotomic\Translatable\TranslatableServiceProvider') && method_exists($resource, 'translations') ) {
-            $results =  $resource->translations->pluck($attribute, config('translatable.locale_key'));
-        } else {
-            $results = data_get($resource, $attribute);
+
+        if (is_object($resource)) {
+            if ( class_exists('\Spatie\Translatable\TranslatableServiceProvider') && method_exists($resource, 'getTranslations') ) {
+                $results = $resource->getTranslations($attribute);
+            } elseif ( class_exists('\Astrotomic\Translatable\TranslatableServiceProvider') && method_exists($resource, 'translations') ) {
+                $results =  $resource->translations->pluck($attribute, config('translatable.locale_key'));
+            }
         }
+        
+        $results = data_get($resource, $attribute);
+        
         return $results;
     }
 
