@@ -49,9 +49,9 @@ class Translatable extends Field
 
         if (is_object($resource)) {
             if ( class_exists('\Spatie\Translatable\TranslatableServiceProvider') && method_exists($resource, 'getTranslations') ) {
-                $results = $resource->getTranslations($attribute);
+                return $results = $resource->getTranslations($attribute);
             } elseif ( class_exists('\Astrotomic\Translatable\TranslatableServiceProvider') && method_exists($resource, 'translations') ) {
-                $results =  $resource->translations->pluck($attribute, config('translatable.locale_key'));
+                return $results =  $resource->translations->pluck($attribute, config('translatable.locale_key'));
             }
         }
         
